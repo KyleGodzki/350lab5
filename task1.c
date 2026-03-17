@@ -8,12 +8,44 @@
 
 int main(void) {
     char * argv1[] = {"cat", "Makefile", 0};
-    char * argv2[] = {"head", "-4", 0};
-    //char * argv2[] = {"wc", "-l", 0};
-    
+    //char * argv2[] = {"head", "-4", 0};
+    char * argv2[] = {"wc", "-l", 0};
+
     setbuf(stdout, NULL);
 
+    int fd[2];
 
+    if (pipe(fd) == -1) {
+            printf("Error");
+            exit(1);
+    }
 
-    return 0;
-}
+    pid_t c1 = fork();
+
+    if (c1 < 0) {
+            printf("Error");
+            exit(1);
+    }
+
+    if (c1 == 0) {
+        printf("In CHILD-1 (PID=%d): executing command %s ...\n", getpid(), argv1[0]);
+        dup2(fd[1], STDOUT_FILENO);
+        close(fd[0]);
+        close(fd[1]);
+        execvp(argv1[0], argv1);
+
+        printf("Exec failed");
+        exit(1);
+
+    }
+
+    pid_t c2 = fork();
+
+    if (c2 < 0) {
+            printf("Error");
+            exit(1);
+    }
+
+    if (c2 == 0) {
+        printf("In CHILD-2 (PID=%d): executing command %s ...\n", getpid(), argv2[0]);
+                                                                                                                                                                                               26,21-28      Top
