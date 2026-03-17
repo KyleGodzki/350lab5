@@ -98,4 +98,20 @@ int main(void) {
     close(pipe1[0]);
     close(pipe1[1]);
     close(pipe2[0]);
-"task2.c" 89L, 1940B                                                                                                                                                                           69,13-20      61%
+    close(pipe2[1]);
+
+    int status;
+
+    waitpid(c1, &status, 0);
+    printf("In PARENT (PID=%d): successfully reaped child (PID=%d)\n", getpid(), c1);
+
+    waitpid(c2, &status, 0);
+    printf("In PARENT (PID=%d): successfully reaped child (PID=%d)\n", getpid(), c2);
+
+    waitpid(c3, &status, 0);
+    printf("In PARENT (PID=%d): successfully reaped child (PID=%d)\n", getpid(), c3);
+
+    return 0;
+}
+
+
