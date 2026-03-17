@@ -48,32 +48,6 @@ int main(void) {
             close(pipe2[0]);
             close(pipe2[1]);
 
-                                                                                                                                                                                               45,0-1        Top    if (c1 == 0) {
-            printf("In CHILD-1 (PID=%d): executing command %s ...\n", getpid(), argv1[0]);
-            dup2(pipe1[1], STDOUT_FILENO);
-
-            close(pipe1[0]);
-            close(pipe1[1]);
-            close(pipe2[0]);
-            close(pipe2[1]);
-
-            execvp(argv1[0], argv1);
-            printf("Exec failed");
-            exit(1);
-    }
-
-    pid_t c2 = fork();
-    if (c2 == 0) {
-            printf("In CHILD-2 (PID=%d): executing command %s ...\n", getpid(), argv2[0]);
-
-            dup2(pipe1[0], STDIN_FILENO);
-            dup2(pipe2[1], STDOUT_FILENO);
-
-            close(pipe1[0]);
-            close(pipe1[1]);
-            close(pipe2[0]);
-            close(pipe2[1]);
-
             execvp(argv2[0], argv2);
             printf("Exec failed");
             exit(1);
