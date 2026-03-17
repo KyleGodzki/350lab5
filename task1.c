@@ -48,4 +48,43 @@ int main(void) {
 
     if (c2 == 0) {
         printf("In CHILD-2 (PID=%d): executing command %s ...\n", getpid(), argv2[0]);
-                                                                                                                                                                                               26,21-28      Top
+        dup2(fd[0], STDIN_FILENO);
+        close(fd[1]);
+        close(fd[0]);
+        execvp(argv2[0], argv2);
+
+        printf("Exec failed");
+        exit(1);
+    }
+
+    close(fd[0]);
+    close(fd[1]);
+    
+    int status;
+    pid_t pid1, pid2;
+
+    pid1 = wait(&status);
+    pid2 = wait(&status);
+
+    printf("In PARENT (PID=%d): successfully reaped child (PID=%d)\n", getpid(), pid1);
+    printf("In PARENT (PID=%d): successfully reaped child (PID=%d)\n", getpid(), pid2);
+
+    return 0;
+}
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+                                                                                                      74,1          Bot
